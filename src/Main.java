@@ -6,7 +6,39 @@ public class Main {
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+        int gameMode=-1;
+        do {
 
+            System.out.println("Choose a game mode:");
+            System.out.println("To play a quick game of Tic Tac Toe enter (1) : ");
+            System.out.println("To play a best-of-3 series enter (2) : ");
+            try {
+                gameMode = scanner.nextInt();
+
+            } catch (InputMismatchException e) {
+                System.out.println("Please choose a valid game mode. ");
+                scanner.next();
+            }
+
+        } while (gameMode != 1 && gameMode != 2);
+
+
+        if (gameMode == 1) {
+
+        playQuickGame();
+
+        } else {
+
+            playBestOf3 ();
+
+        }
+
+
+
+
+    }
+
+    public static void playQuickGame() {
         String[][] field = new String[3][3];
         int turn = 1;
         displayField(field);
@@ -37,8 +69,49 @@ public class Main {
 
 
         }
+    }
 
+    public static void playBestOf3() {
+        int userWins = 0;
+        int compWins = 0;
 
+        while (userWins < 3 && compWins < 3) {
+            System.out.println();
+            String[][] field = new String[3][3];
+            int turn = 1;
+            displayField(field);
+
+            while (!(checkUserWin(field) || checkCompWin(field))) {
+                field = userPlay(field);
+                if (checkUserWin(field)) {
+                    System.out.println("You win this round!");
+                    userWins++;
+                    break;
+                }
+
+                if (turn == 5) {
+                    System.out.println("This game is a tie!");
+                    break;
+                }
+
+                field = compPlay(field);
+                if (checkCompWin(field)) {
+                    System.out.println("Computer wins this round!");
+                    compWins++;
+                    break;
+                }
+
+                turn++;
+            }
+            System.out.println("====================================");
+            System.out.println("Current Score - You: " + userWins + " | Computer: " + compWins);
+        }
+
+        if (userWins == 3) {
+            System.out.println("Congratulations! You are the ultimate winner!");
+        } else if (compWins == 3) {
+            System.out.println("The computer is the ultimate winner. Do better next time!");
+        }
     }
 
     public static void displayField(String[][] field) {
@@ -78,6 +151,7 @@ public class Main {
 
         }
     }
+
 
     public static int generateRandomNum(String[][] field) {
 
@@ -249,5 +323,6 @@ public class Main {
         }
         return false;
     }
+
 
 }
